@@ -1,0 +1,11 @@
+# 工程模块
+projects = [
+    "//base/hello:hello",
+]
+
+
+# 组装工程和编译后执行动作
+group("ccore"){
+        deps = projects
+        #deps += [ "//:dispatch_for_ide" ]
+    }

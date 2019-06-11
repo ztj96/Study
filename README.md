@@ -1,2 +1,1 @@
-# Study
-Study Notes
+Gn编译工具测试Demo

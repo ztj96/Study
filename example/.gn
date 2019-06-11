@@ -1,0 +1,5 @@
+buildconfig = "//gn/BUILDCONFIG.gn"
+
+default_args = {
+    is_component_build = false
+}

@@ -1,0 +1,11 @@
+executable("hello") {
+    #if (is_win) {
+    #    precompiled_header = "stdafx.h"
+    #    precompiled_source = "stdafx.cpp"
+    #}
+
+    # source
+    sources = [
+        "hello.cpp",
+    ]
+}

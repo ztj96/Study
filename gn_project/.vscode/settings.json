@@ -1,0 +1,22 @@
+{
+    "files.associations": {
+        "__mutex_base": "cpp",
+        "memory": "cpp",
+        "bitset": "cpp",
+        "functional": "cpp",
+        "iterator": "cpp",
+        "list": "cpp",
+        "ios": "cpp",
+        "__functional_03": "cpp",
+        "__tree": "cpp",
+        "iosfwd": "cpp",
+        "deque": "cpp",
+        "map": "cpp",
+        "set": "cpp",
+        "string": "cpp",
+        "string_view": "cpp",
+        "vector": "cpp",
+        "__locale": "cpp",
+        "__string": "cpp"
+    }
+}
