@@ -1,5 +1,6 @@
 # <center>WINDOWS下Chromium编译</center> #
 
+
 #一.配置depot_tools
 
 获取depot_tools工具，用于后续自动化下载配置编译Chromium
@@ -69,7 +70,7 @@ master主干直接获取最新代码
 
 分支/Tag代码，带参数执行命令
 
-	d:\Work\Chromium\src>gclient sync --with_branch_heads --jobs 16	//配置Chromium项目，分支需要--with_branch_heads --jobs 16参数
+	d:\Work\Chromium\src>gclient sync --with_branch_heads --with_tags	//配置Chromium项目，分支需要--with_branch_heads --with_tags参数
 
 期间可能会多次遇到如下的错误，是因为某些代码历史本地没有记录(可能与之前使用fetch --no-history chromium有关)
 
@@ -85,7 +86,7 @@ master主干直接获取最新代码
 	d:\Work\Chromium\src\third_party\cld_3\src>git checkout ae02d6b8a2af41e87c956c7c7d3f651a8b7b9e79
 	d:\Work\Chromium\src\>gclient sync --with_branch_heads --jobs 16
 
-方法二：修改脚本，在checkout前先fetch，具体在gclient_smc.py中添加<font color=red>红色</font>代码
+方法二：修改脚本，在checkout前先fetch，具体在gclient_smc.py中添加fetch的逻辑
 
 	  def _Checkout(self, options, ref, force=False, quiet=None):
 	    if quiet is None:
@@ -96,15 +97,19 @@ master主干直接获取最新代码
 	    if quiet:
 	      checkout_args.append('--quiet')
 	    checkout_args.append(ref)
-<font color=red>
 
+		#fetch before checkout
 	    fetch_args=['fetch']
 	    fetch_args.append('origin')
 	    fetch_args.append(ref)
 	    self._Capture(fetch_args)
-</font>
 
 	    return self._Capture(checkout_args)
+
+期间可能会多次遇到如下警告，需要删除无用目录，若不删除，后续编译可能会出问题。运行gclient sync -D或者手动删除都可以，确保都删除了。
+
+	WARNING: 'src\third_party\angle\third_party\vulkan-tools\src' is no longer part of this client.
+	It is recommended that you manually remove it or use 'gclient sync -D' next time.
 
 
 #四.生成gn工程
@@ -115,11 +120,12 @@ master主干直接获取最新代码
 
 若需配置，可带参数执行
 	
-	d:\Work\Chromium\src>gn gen --ide=vs out\Default --args="symbol_level=2 is_debug=true is_component_build=true target_cpu=\"x86\""
+	d:\Work\Chromium\src>gn gen --ide=vs2015 --winsdk=10.0.14393.0 out\Default --args="symbol_level=2 is_debug=true is_component_build=true target_cpu=\"x86\""
 
 其中
 
-	--ide=vs	//生成vs工程，sln文件
+	--ide=vs	//生成vs工程，sln文件，可vs版本
+	--winsdk=10.0.14393.0	//指定win10Sdk路径，不指定可能找不到一些文件
 	//--args中
 	symbol_level=2	//控制最小编译，一般=1是release =2是debug
 	is_debug=true	//是否生成debug信息
@@ -130,6 +136,8 @@ master主干直接获取最新代码
 #五.编译代码
 	使用ninja编译，或者vs工程编译都行，vs工程编译会比较卡，推荐使用depot_tools中的autoninja
 	d:\Work\Chromium\src>autoninja -C out\Default chrome
+
+建议使用未安装chrome的机器进行最终生成的文件，因为安装chrome可能会存在一些插件冲突问题。
 
 
 #注：
