@@ -37,7 +37,6 @@ Chromium代码路径
 	  remotes/origin/HEAD -> origin/master
 	  remotes/origin/master
 
-	
 ----------
 
 *若需要下载<font color=red>指定TAG</font>代码(如62.0.3202.99版本)*
@@ -120,20 +119,21 @@ master主干直接获取最新代码
 
 若需配置，可带参数执行
 	
-	d:\Work\Chromium\src>gn gen --ide=vs2015 --winsdk=10.0.14393.0 out\Default --args="symbol_level=2 is_debug=true is_component_build=true target_cpu=\"x86\""
+	d:\Work\Chromium\src>gn gen --ide=vs2019 --winsdk=10.0.14393.0 out\Default --args="symbol_level=1 is_debug=true is_component_build=false target_cpu=\"x86\""
 
 其中
 
 	--ide=vs	//生成vs工程，sln文件，可vs版本
 	--winsdk=10.0.14393.0	//指定win10Sdk路径，不指定可能找不到一些文件
 	//--args中
-	symbol_level=2	//控制最小编译，一般=1是release =2是debug
+	symbol_level=2	//控制最小编译，一般=1是is_component_build=true =2是is_component_build=false，
 	is_debug=true	//是否生成debug信息
 	target_cpu=\"x86\"	//x86或者x64,x86编译会快一点
-	is_component_build = true	//是否生成更多组件，若true会附带很多dll
+	is_component_build = false	//是否生成更多组件，若true会附带很多dll
 
 
 #五.编译代码
+
 	使用ninja编译，或者vs工程编译都行，vs工程编译会比较卡，推荐使用depot_tools中的autoninja
 	d:\Work\Chromium\src>autoninja -C out\Default chrome
 
