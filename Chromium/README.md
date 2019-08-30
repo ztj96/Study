@@ -119,17 +119,29 @@ master主干直接获取最新代码
 
 若需配置，可带参数执行
 	
-	d:\Work\Chromium\src>gn gen --ide=vs2019 --winsdk=10.0.14393.0 out\Default --args="symbol_level=1 is_debug=true is_component_build=false target_cpu=\"x86\""
+	//生成完整chromium工程
+	d:\Work\Chromium\src>gn gen --ide=vs2019 --winsdk=10.0.14393.0 out\Default --args="symbol_level=2 is_debug=true is_component_build=true target_cpu=\"x86\""
+
+	//生成精简chromium工程 --推荐使用这个
+	d:\Work\Chromium\src>gn gen --sln=chrome --filters=//chrome --no-deps --ide=vs2019 --winsdk=10.0.14393.0 out\Default --args="symbol_level=2 is_debug=true is_component_build=true target_cpu=\"x86\""
+
+	//生成content_shell工程	
+	d:\Work\Chromium\src>gn gen --sln=content_shell --ide=vs2019 --filters=//content/shell:content_shell --no-deps --winsdk=10.0.14393.0 out\Default --args="symbol_level=2 is_debug=true is_component_build=true target_cpu=\"x86\""
 
 其中
 
+	--sln=chrome 	//工程名字
+	--filters=//chrome --no-deps	//vs工程中去除各种组件，提高打开速度
+	--filters=//content/shell:content_shell	//只包含基础的单标签网页功能
 	--ide=vs	//生成vs工程，sln文件，可vs版本
 	--winsdk=10.0.14393.0	//指定win10Sdk路径，不指定可能找不到一些文件
 	//--args中
-	symbol_level=2	//控制最小编译，一般=1是is_component_build=true =2是is_component_build=false，
+	symbol_level=2	//控制最小编译，一般想调试=2
 	is_debug=true	//是否生成debug信息
 	target_cpu=\"x86\"	//x86或者x64,x86编译会快一点
-	is_component_build = false	//是否生成更多组件，若true会附带很多dll
+	is_component_build = true	//是否生成更多组件，若true会附带很多dll
+	
+
 
 
 #五.编译代码
@@ -139,6 +151,11 @@ master主干直接获取最新代码
 
 建议使用未安装chrome的机器进行最终生成的文件，因为安装chrome可能会存在一些插件冲突问题。
 
+
+
+#六.调试Chromium
+
+由于chrome是多进程，可使用--single-process --disable-gpu作为参数启动，方便调试
 
 #注：
 Chromium编译官方说明
